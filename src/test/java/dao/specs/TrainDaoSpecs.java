@@ -25,6 +25,7 @@ public class TrainDaoSpecs {
     private long PUNE_ID;
     private long AJMER_ID;
     private long TRAIN_ID;
+    private boolean insertData;
 
     private StateDao stateDao;
     private TrainDao trainDao;
@@ -53,6 +54,10 @@ public class TrainDaoSpecs {
         save(ajmer);
 
         AJMER_ID = ajmer.getPkId();
+
+        Train duronto = new Train("duronto");
+        duronto.addStations(ajmer, pune);
+        save(duronto, ajmer, pune);
     }
 
     @Test
@@ -82,8 +87,6 @@ public class TrainDaoSpecs {
 
     @Test
     public void should_find_all() {
-        should_be_able_to_add();
-
         List<Train> trains = Lists.newArrayList(trainDao.findAll(6));
         assertThat("trains is null", trains, is(notNullValue()));
         assertThat("trains size is zero",  trains.size(), is(not(0)));
@@ -99,8 +102,6 @@ public class TrainDaoSpecs {
 
     @Test
     public void should_find_all_by_query() {
-        should_be_able_to_add();
-
         String cypher = "MATCH (r1)<-[]-()-[r: TRAINS]->()-[]->(r2) where ID(r) > 0 RETURN r, r1, r2;";
         Map<String, String> params = new HashMap<>();
         List<Train> trains = Lists.newArrayList(trainDao.findAllByQuery(cypher, params));
