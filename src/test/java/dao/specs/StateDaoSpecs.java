@@ -31,6 +31,20 @@ public class StateDaoSpecs {
         save(rj);
     }
 
+    @Test
+    public void should_be_able_to_save_with_private_set_id() {
+        State gj = new State("gujarat");
+        save(gj);
+    }
+
+    @Test
+    public void should_be_able_to_get_with_private_set_id() {
+        State gj = stateDao.findOne(15L);
+        assertThat("state is null", gj, is(notNullValue()));
+        assertThat("state id does not match", gj.getPkId(), is(15L));
+        assertThat("state name does not match", gj.getName(), is("gujarat"));
+    }
+
     private void save(State station) {
         State saved = stateDao.createOrUpdate(station);
         assertThat("state is null", saved, is(notNullValue()));

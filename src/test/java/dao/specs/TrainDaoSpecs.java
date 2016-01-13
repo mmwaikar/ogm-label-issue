@@ -124,12 +124,6 @@ public class TrainDaoSpecs {
         }
     }
 
-    @Test
-    public void should_be_able_to_save_with_private_set_id() {
-        State gj = new State("gujarat");
-        save(gj);
-    }
-
     private void save(Train train, Station source, Station dest) {
         Train saved = trainDao.createOrUpdate(train);
         assertThat("train is null", saved, is(notNullValue()));
