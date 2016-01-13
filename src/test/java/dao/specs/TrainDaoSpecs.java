@@ -37,27 +37,27 @@ public class TrainDaoSpecs {
         trainDao = new TrainDao("http://localhost:7474", "neo4j", "neo4j123");
         stationDao = new StationDao("http://localhost:7474", "neo4j", "neo4j123");
 
-        State mh = new State("maharashtra");
-        save(mh);
-
-        State rj = new State("rajasthan");
-        save(rj);
-
-        Station pune = new Station("pune");
-        pune.setState(mh);
-        save(pune);
-
-        PUNE_ID = pune.getPkId();
-
-        Station ajmer = new Station("ajmer");
-        ajmer.setState(rj);
-        save(ajmer);
-
-        AJMER_ID = ajmer.getPkId();
-
-        Train duronto = new Train("duronto");
-        duronto.addStations(ajmer, pune);
-        save(duronto, ajmer, pune);
+//        State mh = new State("maharashtra");
+//        save(mh);
+//
+//        State rj = new State("rajasthan");
+//        save(rj);
+//
+//        Station pune = new Station("pune");
+//        pune.setState(mh);
+//        save(pune);
+//
+//        PUNE_ID = pune.getPkId();
+//
+//        Station ajmer = new Station("ajmer");
+//        ajmer.setState(rj);
+//        save(ajmer);
+//
+//        AJMER_ID = ajmer.getPkId();
+//
+//        Train duronto = new Train("duronto");
+//        duronto.addStations(ajmer, pune);
+//        save(duronto, ajmer, pune);
     }
 
     @Test
@@ -102,7 +102,8 @@ public class TrainDaoSpecs {
 
     @Test
     public void should_find_all_by_query() {
-        String cypher = "MATCH (r1)<-[]-()-[r: TRAINS]->()-[]->(r2) where ID(r) > 0 RETURN r, r1, r2;";
+//        String cypher = "MATCH (r1)<-[]-()-[r: TRAINS]->()-[]->(r2) where ID(r) > 0 RETURN r, r1, r2;";
+        String cypher = "MATCH (state1:State)<-[s1:STATE]-(src:Station)-[t:TRAINS]->(tgt:Station)-[s2:STATE]->(state2:State) RETURN t,src,tgt,state1,state2,s1,s2;";
         Map<String, String> params = new HashMap<>();
         List<Train> trains = Lists.newArrayList(trainDao.findAllByQuery(cypher, params));
 
@@ -116,6 +117,17 @@ public class TrainDaoSpecs {
         System.out.println(train.getSource().getState());
         assertThat("train target state is null", train.getTarget().getState(), is(notNullValue()));
         System.out.println(train.getTarget().getState());
+
+        for (Train t: trains) {
+            System.out.println(t.getSource().getState().getName());
+            System.out.println(t.getTarget().getState().getName());
+        }
+    }
+
+    @Test
+    public void should_be_able_to_save_with_private_set_id() {
+        State gj = new State("gujarat");
+        save(gj);
     }
 
     private void save(Train train, Station source, Station dest) {
