@@ -13,14 +13,6 @@ public abstract class Entity {
         return pkId;
     }
 
-    private void setPkId(Long pkId) {
-        if (pkId != null) {
-            throw new UnsupportedOperationException("pkId can only be set by the OGM.");
-        }
-
-        this.pkId = pkId;
-    }
-
     @Override
     public String toString() {
         return "Entity{" +
