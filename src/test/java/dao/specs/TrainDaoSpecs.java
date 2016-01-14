@@ -78,11 +78,15 @@ public class TrainDaoSpecs {
 
     @Test
     public void should_find_by_id() {
+        TRAIN_ID = 32;
         Train train = trainDao.findOne(TRAIN_ID, 2);
         assertThat("train source is null", train.getSource(), is(notNullValue()));
         assertThat("train target is null", train.getTarget(), is(notNullValue()));
         assertThat("train source state is null", train.getSource().getState(), is(notNullValue()));
         assertThat("train target state is null", train.getTarget().getState(), is(notNullValue()));
+
+        System.out.println("source state: " + train.getSource().getState().getName());
+        System.out.println("target state: " + train.getTarget().getState().getName());
     }
 
     @Test
